@@ -81,7 +81,7 @@ var path = require("path");
 
       async function waitForSceneReady() {
         return new Promise(async (resolve, reject) => {
-          scene.executeWhenReady(() => {
+          await scene.executeWhenReady(() => {
             resolve();
           });
         });
@@ -89,7 +89,7 @@ var path = require("path");
       async function getBlobAsBinaryString(theBlob) {
         return new Promise(async (resolve, reject) => {
           const reader = new FileReader();
-          reader.readAsBinaryString(theBlob);
+          await reader.readAsBinaryString(theBlob);
           reader.onload = () => resolve(reader.result);
           reader.onerror = () =>
             reject("Error occurred while reading binary string");
@@ -106,9 +106,10 @@ var path = require("path");
           true
         );
         await waitForSceneReady();
-        const arrayBuffer = await BABYLON.EnvironmentTextureTools.CreateEnvTextureAsync(
-          environment
-        );
+        const arrayBuffer =
+          await BABYLON.EnvironmentTextureTools.CreateEnvTextureAsync(
+            environment
+          );
         var blob = new Blob([arrayBuffer], { type: "octet/stream" });
         const binaryFileResult = await getBlobAsBinaryString(blob);
         environment.dispose();
